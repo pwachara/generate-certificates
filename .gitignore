@@ -1,4 +1,5 @@
 node_modules
+pocketbase.exe
 
 # Output
 .output
@@ -7,7 +8,6 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
-pocketbase.exe
 
 # OS
 .DS_Store
