@@ -1,8 +1,9 @@
 <script lang="ts">
-	import '../app.css';
+	import '../../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { pb } from "$lib/pocketbase"
 	import { page } from '$app/stores';
+	import { goto} from '$app/navigation';
 
 	let { children } = $props();
 
@@ -28,6 +29,11 @@
         return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
 	}
 
+	function logout() {
+		pb.authStore.clear()
+        goto("/login", {invalidateAll:true} )
+	}
+    
 </script>
 
 <svelte:head>
@@ -158,20 +164,23 @@
                     </button>
                     <h2 class="ml-2 md:ml-0 text-xl font-poppins font-semibold text-gray-800">Dashboard</h2>
                 </div>
-                <div class="flex items-center space-x-4">                    
-                    <!-- User Menu -->
-                    <div class="relative">
-                        <button class="flex items-center focus:outline-none">
-                            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white font-semibold">
-                                {nameInitials}
-                            </div>
-                            <span class="ml-2 text-gray-700 font-medium hidden md:block">{ fullName }</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-gray-500 hidden md:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+                {#if pb.authStore.isValid}
+                    <div class="relative flex items-center space-x-4 hover:cursor-pointer">                    
+                        <!-- User Menu -->
+                        <details class="relative">
+
+                            <summary>
+                                <div class="flex items-center focus:outline-none">
+                                    <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white font-semibold">
+                                        {nameInitials}
+                                    </div>
+                                    <span class="ml-2 text-gray-700 font-medium hidden md:block">{ fullName }</span>
+                                </div>
+                            </summary>
+                                <button class="absolute bg-gray-200 right-0 top-12 w-48 flex items-center justify-center px-4 py-2 hover:cursor-pointer" onclick={ logout }>Logout</button>
+                        </details>
                     </div>
-                </div>
+                {/if}
             </div>
         </header>
 
@@ -195,4 +204,17 @@
 		font-weight: bold;
 		color: white;
 	}
+
+    details summary {
+        list-style: none; /* removes list-style marker */
+        cursor: pointer;  /* keeps clickable cursor */
+    }
+
+    details summary::-webkit-details-marker {
+        display: none;    /* Chrome / Safari */
+    }
+
+    details summary::marker {
+        display: none;    /* Firefox / modern browsers */
+    }
 </style>

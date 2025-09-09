@@ -1,3 +1,32 @@
+<script>
+    import { goto } from "$app/navigation";
+    import { pb } from "$lib/pocketbase";
+    import { onMount } from "svelte";
+
+    let noOfParticipants = 0
+    
+    onMount(async() => {
+
+        if(!pb.authStore.isValid){
+            goto("/login", { invalidateAll: true})
+        }
+
+        noOfParticipants = await getTotalParticipants();
+
+    })
+
+    async function getTotalParticipants() {
+        // use getList with page = 1 and perPage = 1 to minimize payload
+        const result = await pb.collection("participants").getList(1, 1);
+
+        console.log("Total participants:", result.totalItems);
+        return result.totalItems;
+    }
+
+
+
+</script>
+
 <!-- Dashboard Content -->
 <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
     <!-- Stats Overview -->
@@ -9,9 +38,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                     </svg>
                 </div>
-                <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-500">Total Certificates Generated</h3>
-                    <p class="text-xl font-bold text-gray-900">1,248</p>
+                <div class="flex flex-col">
+                    <h3 class="text-sm font-medium text-gray-500">Total Participants Trained</h3>
+                    <p class="text-xl font-bold text-gray-900 self-center">{ noOfParticipants }</p>
                 </div>
             </div>
             <div class="mt-2">
@@ -29,8 +58,8 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-500">Total Suppliers</h3>
-                    <p class="text-xl font-bold text-gray-900">42</p>
+                    <h3 class="text-sm font-medium text-gray-500">Total Certificates Generated</h3>
+                    <p class="text-xl font-bold text-gray-900">242</p>
                 </div>
             </div>
             <div class="mt-2">
@@ -48,7 +77,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-500">Total Customers</h3>
+                    <h3 class="text-sm font-medium text-gray-500">Total Certificates Sent</h3>
                     <p class="text-xl font-bold text-gray-900">156</p>
                 </div>
             </div>
@@ -67,8 +96,8 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-500">Revenue</h3>
-                    <p class="text-xl font-bold text-gray-900">$24,563</p>
+                    <h3 class="text-sm font-medium text-gray-500">Certificates not yet Sent</h3>
+                    <p class="text-xl font-bold text-gray-900">3</p>
                 </div>
             </div>
             <div class="mt-2">
