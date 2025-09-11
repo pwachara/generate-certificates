@@ -29,7 +29,7 @@ var embeddedTemplate []byte
 
 // -------------------- CONFIG --------------------
 const (
-	collectionName  = "participants"
+	collectionName  = "trainees"
 	fileFieldName   = "certificate"
 	defaultFontSize = 48
 	pageWidth       = 297.0 // A4 L width in mm
@@ -54,7 +54,7 @@ func main() {
 
 			records, err := pbApp.FindRecordsByFilter(collectionName, "", "", 0, 0)
 			if err != nil {
-				return e.String(http.StatusInternalServerError, "failed to fetch participants: "+err.Error())
+				return e.String(http.StatusInternalServerError, "failed to fetch trainees: "+err.Error())
 			}
 
 			generated := 0
@@ -206,7 +206,7 @@ func main() {
 
 			records, err := pbApp.FindRecordsByFilter(collectionName, "", "", 0, 0)
 			if err != nil {
-				return e.String(http.StatusInternalServerError, "failed to fetch participants: "+err.Error())
+				return e.String(http.StatusInternalServerError, "failed to fetch trainees: "+err.Error())
 			}
 
 			mailClient := pbApp.NewMailClient()
@@ -273,18 +273,18 @@ func main() {
 			rec, err := pbApp.FindRecordById(collectionName, id)
 			fmt.Println("This is the record selected from the DB ", rec)
 			if err != nil {
-				return e.String(http.StatusNotFound, "participant not found")
+				return e.String(http.StatusNotFound, "trainee not found")
 			}
 
 			name := strings.TrimSpace(rec.GetString("name"))
 			email := strings.TrimSpace(rec.GetString("email"))
 			if name == "" || email == "" {
-				return e.String(http.StatusBadRequest, "participant missing name or email")
+				return e.String(http.StatusBadRequest, "trainee missing name or email")
 			}
 
 			pdfBytes, filename, err := getOrCreateCertificate(pbApp, rec, name)
 			if err != nil {
-				return e.String(http.StatusInternalServerError, "failed to ensure certificate: "+err.Error())
+				return e.String(http.StatusInternalServerError, "failed to fetch or create certificate: "+err.Error())
 			}
 
 			mailClient := pbApp.NewMailClient()
