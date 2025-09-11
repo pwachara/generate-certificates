@@ -6,13 +6,16 @@
     let tabSet = $state(0); // 0 for current employees, 1 for ex-employees
     let search = $state("");
 
-    onMount(() => {
+    let trainees
 
-        if(!pb.authStore.isValid){
+    onMount(async() => {
 
-            goto("/login", { invalidateAll:true })
-        }
+        trainees = await pb.collection("trainees").getFullList({sort:"name"})
+    
+        console.log("The Trainees list is ", trainees)
     })
+
+
     
     // Sample data - in a real app this would come from a store or API
     const employees = $state([
