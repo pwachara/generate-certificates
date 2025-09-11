@@ -113,7 +113,7 @@
         <!-- Recent Sales -->
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">Recent Sales</h3>
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Recent Trainees</h3>
             </div>
             <div class="px-4 py-5 sm:p-6">
                 <div class="overflow-x-auto">

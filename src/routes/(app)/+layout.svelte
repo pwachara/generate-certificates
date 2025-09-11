@@ -2,14 +2,12 @@
 	import '../../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { pb } from "$lib/pocketbase"
-	import { page } from '$app/stores';
 	import { goto} from '$app/navigation';
+    import { page } from '$app/state';
 
 	let { children } = $props();
 
 	const user = pb.authStore.record
-
-	console.log("LOGGED IN USER IS ", user)
 
 	let fullName = user?.name
 
@@ -63,7 +61,7 @@
         <nav class="flex-1 overflow-y-auto py-4">
             <ul>
                 <li class="mb-1">
-                    <a class:active={$page.url.pathname === "/"}  href="/" class="flex items-center px-4 py-3  text-gray-300">
+                    <a class:active={page.url.pathname === "/"}  href="/" class="flex items-center px-4 py-3  text-gray-300 hover:bg-gray-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                         </svg>
@@ -71,27 +69,25 @@
                     </a>
                 </li>
                 <li class="mb-1">
-                    <a class:active={$page.url.pathname === "/participants"} href="/participants" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    <a class:active={page.url.pathname === "/trainees"} href="/trainees" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span class="ml-3">Participants</span>
+                        <span class="ml-3">Trainees</span>
                     </a>
                 </li>
                 <li class="mb-1">
-                    <a href="/" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    <a class:active={page.url.pathname === "/organizations"}  href="/organizations" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span class="ml-3">Suppliers</span>
+                        <span class="ml-3">Organizations</span>
                     </a>
                 </li>
                 <li class="mb-1">
-                    <a href="/" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        <span class="ml-3">Customers</span>
+                    <a class:active={page.url.pathname === "/courses"} href="/courses" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17 15.2454V22.1169C17 22.393 16.7761 22.617 16.5 22.617C16.4094 22.617 16.3205 22.5923 16.2428 22.5457L12 20L7.75725 22.5457C7.52046 22.6877 7.21333 22.6109 7.07125 22.3742C7.02463 22.2964 7 22.2075 7 22.1169V15.2454C5.17107 13.7793 4 11.5264 4 9C4 4.58172 7.58172 1 12 1C16.4183 1 20 4.58172 20 9C20 11.5264 18.8289 13.7793 17 15.2454ZM9 16.4185V19.4676L12 17.6676L15 19.4676V16.4185C14.0736 16.7935 13.0609 17 12 17C10.9391 17 9.92643 16.7935 9 16.4185ZM12 15C15.3137 15 18 12.3137 18 9C18 5.68629 15.3137 3 12 3C8.68629 3 6 5.68629 6 9C6 12.3137 8.68629 15 12 15Z"></path></svg>
+                        <span class="ml-3">Courses</span>
                     </a>
                 </li>
                 <li class="mb-1">
@@ -167,18 +163,21 @@
                 {#if pb.authStore.isValid}
                     <div class="relative flex items-center space-x-4 hover:cursor-pointer">                    
                         <!-- User Menu -->
-                        <details class="relative">
-
-                            <summary>
-                                <div class="flex items-center focus:outline-none">
+                        <div class="relative">
+                                <button class="flex items-center focus:outline-none hover:cursor-pointer" popovertarget="dropdown" popovertargetaction="toggle">
                                     <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white font-semibold">
                                         {nameInitials}
                                     </div>
                                     <span class="ml-2 text-gray-700 font-medium hidden md:block">{ fullName }</span>
+                                </button>
+                                <div id="dropdown" popover class="absolute right-0 top-16 w-48">
+                                    <ul>
+                                        <li>
+                                            <button class="bg-gray-300 font-semibold w-full flex items-center justify-center px-4 py-2 hover:cursor-pointer" onclick={ logout }>Logout</button>
+                                        </li>
+                                    </ul>
                                 </div>
-                            </summary>
-                                <button class="absolute bg-gray-200 right-0 top-12 w-48 flex items-center justify-center px-4 py-2 hover:cursor-pointer" onclick={ logout }>Logout</button>
-                        </details>
+                        </div>
                     </div>
                 {/if}
             </div>
@@ -192,29 +191,39 @@
 </section>
 
 <style>
-	/* .active{
-		text-decoration-line: underline;
-		text-decoration-thickness: 4px;
-		text-decoration-color: #fbbf24;
-		text-underline-position: under;
-		-ms-text-underline-position: under;
-	} */
 	.active{
 		background-color: #fbbf24;
 		font-weight: bold;
 		color: white;
 	}
 
-    details summary {
-        list-style: none; /* removes list-style marker */
-        cursor: pointer;  /* keeps clickable cursor */
+       /* Override popover positioning */
+    [popover] {
+      position: absolute;
+      inset: auto 0 auto auto; /* anchor below, aligned right */
+      margin-top: 4rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 150px;
     }
 
-    details summary::-webkit-details-marker {
-        display: none;    /* Chrome / Safari */
+    [popover] ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
-    details summary::marker {
-        display: none;    /* Firefox / modern browsers */
+    [popover] li {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
     }
+
+    [popover] li:hover {
+      background: #f2f2f2;
+    }
+
+
 </style>

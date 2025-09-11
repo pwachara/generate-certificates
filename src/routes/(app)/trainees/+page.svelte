@@ -1,7 +1,18 @@
 <script>
+	import { goto } from "$app/navigation";
+    import { pb } from "$lib/pocketbase"
+	import { onMount } from "svelte";
     // Svelte 5 code for the component
-    let tabSet = 0; // 0 for current employees, 1 for ex-employees
-    let search = '';
+    let tabSet = $state(0); // 0 for current employees, 1 for ex-employees
+    let search = $state("");
+
+    onMount(() => {
+
+        if(!pb.authStore.isValid){
+
+            goto("/login", { invalidateAll:true })
+        }
+    })
     
     // Sample data - in a real app this would come from a store or API
     const employees = $state([
@@ -91,13 +102,13 @@
 <section class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
-        <h3 class="text-2xl font-bold p-6 pb-2">Employee Listing</h3>
+        <h3 class="text-2xl font-bold p-6 pb-2">Trainee Listing</h3>
 
         <!-- New Employee Button -->
         <div class="flex flex-row justify-between px-6 py-4">
-            <button class="px-4 py-2 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors">
-                <a href="/employees/create">
-                    <i class="fas fa-plus mr-2"></i> New Employee
+            <button class="px-4 py-2 bg-gray-600 text-white font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors">
+                <a href="/trainees/create">
+                    + New Trainee
                 </a>
             </button>
         </div>
@@ -106,11 +117,11 @@
         <div class="px-6 pt-4">
             <div class="border-b border-gray-200">
                 <div class="flex space-x-8">
-                    <button class="py-2 px-1 font-semibold text-sm tab-active" onclick={() => setTabSet(0)}>
-                        Current Employees
+                    <button class="py-2 px-1 font-semibold text-sm text-gray-500 hover:text-gray-700 hover:cursor-pointer" onclick={() => setTabSet(0)} class:tab-active={tabSet === 0? true : false}>
+                        Current Trainees
                     </button>
-                    <button class="py-2 px-1 font-semibold text-sm text-gray-500 hover:text-gray-700" onclick={() => setTabSet(1)}>
-                        Ex-Employees
+                    <button class="py-2 px-1 font-semibold text-sm text-gray-500 hover:text-gray-700 hover:cursor-pointer" onclick={() => setTabSet(1)} class:tab-active={tabSet === 1? true : false}>
+                        Past Trainees
                     </button>
                 </div>
             </div>
@@ -142,11 +153,11 @@
                                 <tr>
                                     <th>Employee</th>
                                     <th>Department</th>
-                                    <th class="text-center">Employment Number</th>
-                                    <th class="text-center">Date Employed</th>
-                                    <th class="text-center">Gender</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Action</th>
+                                    <th>Employment Number</th>
+                                    <th>Date Employed</th>
+                                    <th>Gender</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -154,14 +165,14 @@
                                     <tr>
                                         <td class="font-medium">{employee.firstName} {employee.middleName} {employee.lastName}</td>
                                         <td>{employee.expand.departmentId.name}</td>
-                                        <td class="text-center">{employee.empNumber}</td>
-                                        <td class="text-center">{employee.dateEmployed ? employee.dateEmployed : "N/A"}</td>
-                                        <td class="text-center">{employee.gender}</td>
-                                        <td class="text-center"><span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{employee.status}</span></td>
-                                        <td class="text-center">
-                                            <button class="w-6 h-6 text-blue-500 hover:text-blue-700" aria-label="button">
+                                        <td>{employee.empNumber}</td>
+                                        <td>{employee.dateEmployed ? employee.dateEmployed : "N/A"}</td>
+                                        <td>{employee.gender}</td>
+                                        <td><span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{employee.status}</span></td>
+                                        <td>
+                                            <button class="w-6 h-6 text-gray-500 hover:text-gray-700" aria-label="button">
                                                 <a href={`./employees/edit/${employee.id}`} aria-label="link">
-                                                    <i class="fas fa-edit"></i>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.8995 6.85453L17.1421 11.0972L7.24264 20.9967H3V16.754L12.8995 6.85453ZM14.3137 5.44032L16.435 3.319C16.8256 2.92848 17.4587 2.92848 17.8492 3.319L20.6777 6.14743C21.0682 6.53795 21.0682 7.17112 20.6777 7.56164L18.5563 9.68296L14.3137 5.44032Z"></path></svg>
                                                 </a>
                                             </button>
                                         </td>
@@ -195,11 +206,11 @@
                                 <tr>
                                     <th>Employee</th>
                                     <th>Department</th>
-                                    <th class="text-center">Employment Number</th>
-                                    <th class="text-center">Date Employed</th>
-                                    <th class="text-center">Gender</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Date Left Employment</th>
+                                    <th>Employment Number</th>
+                                    <th>Date Employed</th>
+                                    <th>Gender</th>
+                                    <th>Status</th>
+                                    <th>Date Left Employment</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,11 +218,11 @@
                                     <tr>
                                         <td class="font-medium">{employee.firstName} {employee.middleName} {employee.lastName}</td>
                                         <td>{employee.expand.departmentId.name}</td>
-                                        <td class="text-center">{employee.empNumber}</td>
-                                        <td class="text-center">{employee.dateEmployed ? employee.dateEmployed : "N/A"}</td>
-                                        <td class="text-center">{employee.gender}</td>
-                                        <td class="text-center"><span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{employee.status}</span></td>
-                                        <td class="text-center">{employee.dateLeft ? employee.dateLeft : "N/A"}</td>
+                                        <td>{employee.empNumber}</td>
+                                        <td>{employee.dateEmployed ? employee.dateEmployed : "N/A"}</td>
+                                        <td>{employee.gender}</td>
+                                        <td><span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{employee.status}</span></td>
+                                        <td>{employee.dateLeft ? employee.dateLeft : "N/A"}</td>
                                     </tr>
                                 {/each}
                             </tbody>
@@ -225,8 +236,8 @@
 
     <style>
         .tab-active {
-            border-bottom: 3px solid #3b82f6;
-            color: #2563eb;
+            border-bottom: 3px solid #fbbf24;
+            color: #1c1c1c;
             font-weight: 600;
         }
         .employee-table {

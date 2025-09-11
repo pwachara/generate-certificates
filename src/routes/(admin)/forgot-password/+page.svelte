@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { pb } from '$lib/pocketbase'
-    import "../../../app.css"
+  import "../../../app.css"
 
 	let email = $state("")
-    let dialog: HTMLDialogElement
+  let dialog: HTMLDialogElement
+  let error = $state("")
 
-    function displaySentMessage(){
-        dialog.showModal()
-        
-    }
+  function displaySentMessage(){
+      dialog.showModal()
+      
+  }
 
 	async function submitEmail() {
 
@@ -24,8 +25,8 @@
 	}
 
 	function closeDialog() {
-        submitEmail()
-		dialog.close()
+      submitEmail()
+		  dialog.close()
 	}
 
 </script>
@@ -52,6 +53,7 @@
             id="email"
             placeholder="Email*"
             bind:value={email}
+            required
           />
         </div>
       </form>
